@@ -61,9 +61,9 @@ RUN docker-php-ext-install \
     bcmath
 
 # Install composer
+# Install composer
 ENV COMPOSER_HOME /composer
-ENV PATH ./vendor/bin:/composer/vdocker ps
-endor/bin:$PATH
+ENV PATH ./vendor/bin:/composer/vendor/bin:$PATH
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
