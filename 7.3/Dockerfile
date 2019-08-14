@@ -21,7 +21,6 @@ RUN apk add --no-cache \
     libc-dev \
     libpng-dev \
     make \
-    mysql-client \
     nodejs \
     nodejs-npm \
     yarn \
@@ -30,6 +29,11 @@ RUN apk add --no-cache \
     rsync \
     zlib-dev \
     libzip-dev
+
+# Install mysql
+RUN apk add --no-cache \
+    mysql \
+    mysql-client
 
 # Install PECL and PEAR extensions
 RUN pecl install \
@@ -58,7 +62,8 @@ RUN docker-php-ext-install \
 
 # Install composer
 ENV COMPOSER_HOME /composer
-ENV PATH ./vendor/bin:/composer/vendor/bin:$PATH
+ENV PATH ./vendor/bin:/composer/vdocker ps
+endor/bin:$PATH
 ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
