@@ -56,7 +56,6 @@ RUN docker-php-ext-install \
     pcntl \
     tokenizer \
     xml \
-    gd \
     zip \
     bcmath
 
