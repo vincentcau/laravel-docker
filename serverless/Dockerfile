@@ -10,25 +10,54 @@ RUN apk add --no-cache --virtual .build-deps \
     postgresql-dev \
     sqlite-dev
 
-# Install production dependencies
-RUN apk add --no-cache \
-    bash \
-    curl \
-    g++ \
-    gcc \
-    git \
-    imagemagick \
-    libc-dev \
-    libpng-dev \
-    make \
-    nodejs \
-    nodejs-npm \
-    yarn \
-    openssh-client \
-    postgresql-libs \
-    rsync \
-    zlib-dev \
-    libzip-dev
+# --------------------------------------------------------- Install dependancies
+RUN apk add --update --no-cache \
+        # Dependancy for intl \
+        icu-libs \
+        libintl \
+        # Dependancy for zip \
+        libzip \
+        # Misc tools \
+        git \
+        patch \
+        bash \
+        curl \
+        gcc \
+        imagemagick \
+        libc-dev \
+        nodejs \
+        nodejs-npm \
+        yarn \
+        openssh-client \
+        postgresql-libs \
+        rsync \
+        zlib-dev \
+        libintl
+
+# --------------------------------------------------- Install build dependancies
+RUN apk add --update --no-cache --virtual .docker-php-global-dependancies \
+        # Build dependencies for gd \
+        freetype-dev \
+        libjpeg-turbo-dev \
+        libpng-dev \
+        # Build dependency for gettext \
+        gettext-dev \
+        # Build dependency for intl \
+        icu-dev \
+        # Build dependencies for XML part \
+        libxml2-dev \
+        ldb-dev \
+        # Build dependencies for Zip \
+        libzip-dev \
+        # Build dependancies for Pecl \
+        autoconf \
+        g++ \
+        make \
+        # Build dependancy for APCu \
+        pcre-dev \
+        # Misc build dependancy \
+        wget
+
 
 # Install mysql
 RUN apk add --no-cache \
@@ -41,25 +70,33 @@ RUN pecl install \
     xdebug
 
 # Install and enable php extensions
-RUN docker-php-ext-enable \
-    imagick \
-    xdebug
-RUN docker-php-ext-configure zip --with-libzip
-RUN docker-php-ext-install \
-    iconv \
-    mbstring \
-    pdo \
-    pdo_mysql \
-    pdo_pgsql \
-    pdo_sqlite \
-    pcntl \
-    tokenizer \
-    xml \
-    zip \
-    bcmath
+# ------------------------------------------------------- Install php extensions
+RUN php -m && \
+    docker-php-ext-configure bcmath --enable-bcmath && \
+    docker-php-ext-configure gd \
+      --with-freetype-dir=/usr/include/ \
+      --with-jpeg-dir=/usr/include/ \
+      --with-png-dir=/usr/include/ && \
+    docker-php-ext-configure gettext && \
+    docker-php-ext-configure intl --enable-intl && \
+    docker-php-ext-configure mbstring --enable-mbstring && \
+    docker-php-ext-configure opcache --enable-opcache && \
+    docker-php-ext-configure pcntl --enable-pcntl && \
+    docker-php-ext-configure soap && \
+    docker-php-ext-configure zip --enable-zip --with-libzip && \
+    docker-php-ext-install bcmath \
+        gd \
+        gettext \
+        intl \
+        mbstring \
+        opcache \
+        pcntl \
+        soap \
+        zip && \
+    php -m
 
 # Install GD
-RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev && \
+RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libjpeg-turbo-dev && \
   docker-php-ext-configure gd \
     --with-gd \
     --with-freetype-dir=/usr/include/ \
@@ -69,19 +106,9 @@ RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev lib
   docker-php-ext-install -j${NPROC} gd && \
   apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
-# Install composer
-ENV COMPOSER_HOME /composer
-ENV PATH ./vendor/bin:/composer/vendor/bin:$PATH
-ENV COMPOSER_ALLOW_SUPERUSER 1
-RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
-
-# Install PHP_CodeSniffer
-RUN composer global require "squizlabs/php_codesniffer=*"
-
 
 # Install serverless
 RUN npm install -g serverless --unsafe-perm=true --allow-root
-
 
 #install python and aws
 RUN apk add --update \
@@ -95,6 +122,15 @@ RUN apk add --update \
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py  && \
     python get-pip.py  && \
     pip install awscli
+
+# Install composer
+ENV COMPOSER_HOME /composer
+ENV PATH ./vendor/bin:/composer/vendor/bin:$PATH
+ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+
+# Install PHP_CodeSniffer
+RUN composer global require "squizlabs/php_codesniffer=*"
 
 # Cleanup dev dependencies
 RUN apk del -f .build-deps
