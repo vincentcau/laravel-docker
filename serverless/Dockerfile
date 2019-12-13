@@ -93,6 +93,13 @@ RUN php -m && \
         pcntl \
         soap \
         zip && \
+        iconv \
+        pdo \
+        pdo_mysql \
+        pdo_pgsql \
+        pdo_sqlite \
+        tokenizer \
+        xml \
     php -m
 
 # Install GD
