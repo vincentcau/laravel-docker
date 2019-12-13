@@ -79,23 +79,6 @@ RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/
 # Install PHP_CodeSniffer
 RUN composer global require "squizlabs/php_codesniffer=*"
 
-# Install serverless
-RUN npm install -g serverless --unsafe-perm=true --allow-root
-
-
-#install python and aws
-RUN apk add --update \
-    python \
-    python-dev \
-    py-pip \
-    build-base \
-  && pip install virtualenv \
-  && rm -rf /var/cache/apk/*
-
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py  && \
-    python get-pip.py  && \
-    pip install awscli
-
 # Cleanup dev dependencies
 RUN apk del -f .build-deps
 
