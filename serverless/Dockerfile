@@ -88,6 +88,7 @@ RUN php -m && \
         gd \
         gettext \
         intl \
+        exif \
         mbstring \
         opcache \
         pcntl \
