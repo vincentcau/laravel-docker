@@ -118,18 +118,17 @@ RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libjpeg-turbo-
 # Install serverless
 RUN npm install -g serverless --unsafe-perm=true --allow-root
 
-#install python and aws
-RUN apk add --update \
-    python \
-    python-dev \
-    py-pip \
-    build-base \
-  && pip install virtualenv \
-  && rm -rf /var/cache/apk/*
+
+# Install python/pip & aws
+ENV PYTHONUNBUFFERED=1
+RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+RUN python3 -m ensurepip
+RUN pip3 install --no-cache --upgrade pip setuptools
+
 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py  && \
-    python get-pip.py  && \
-    pip install awscli
+    python3 get-pip.py  && \
+    pip3 install awscli
 
 # Install composer
 ENV COMPOSER_HOME /composer
