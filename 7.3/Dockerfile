@@ -1,4 +1,4 @@
-FROM php:7.3-alpine3.9
+FROM php:7.3-alpine3.11
 
 # Install dev dependencies
 RUN apk add --no-cache --virtual .build-deps \
@@ -21,8 +21,8 @@ RUN apk add --no-cache \
     libc-dev \
     libpng-dev \
     make \
-    nodejs \
-    nodejs-npm \
+    nodejs>12.22.1 \
+    npm \
     yarn \
     openssh-client \
     postgresql-libs \
