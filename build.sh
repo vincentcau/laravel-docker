@@ -1,3 +1,5 @@
+#deploy to Sapiendo AWS
+
 aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 791327379439.dkr.ecr.eu-west-3.amazonaws.com/boris-parsing
 aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin public.ecr.aws/o1b1c4o6/laravel-docker
 
@@ -13,9 +15,12 @@ aws ecr get-login-password --region eu-west-3 | docker login --username AWS --pa
 
 docker push public.ecr.aws/o1b1c4o6/laravel-docker:latest
 
+
+
+## deploy to SHRD gitlab
+
 docker login repo.shrd.fr:5050
 
 docker build -t repo.shrd.fr:5050/sapiendo/sapiendo_laravel:latest .
-
 
 docker push repo.shrd.fr:5050/sapiendo/sapiendo_laravel:latest
