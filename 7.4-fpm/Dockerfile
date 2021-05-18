@@ -22,6 +22,7 @@ RUN apk add --no-cache \
         tzdata \
         mysql \
         mysql-client \
+        rsync \
         zlib-dev && \
     apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
