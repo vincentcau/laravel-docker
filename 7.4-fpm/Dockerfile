@@ -5,6 +5,7 @@ WORKDIR /srv
 RUN apk add --no-cache \
         pcre \
         pcre-dev \
+        openssh \
         bash \
         ca-certificates \
         git \
