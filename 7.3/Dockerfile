@@ -28,7 +28,8 @@ RUN apk add --no-cache \
     postgresql-libs \
     rsync \
     zlib-dev \
-    libzip-dev
+    libzip-dev \
+    php7-xml
 
 # Install mysql
 RUN apk add --no-cache \
