@@ -23,6 +23,7 @@ RUN apk add --no-cache \
         mysql \
         mysql-client \
         rsync \
+        libxml2-dev \
         zlib-dev && \
     apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS \
@@ -34,6 +35,7 @@ RUN apk add --no-cache \
     docker-php-ext-install sockets && \
     docker-php-ext-install pdo_mysql && \
     docker-php-ext-install bcmath && \
+    docker-php-ext-install xml && \
     docker-php-ext-configure gd --with-jpeg && \
     docker-php-ext-install gd && \
     apk del .build-deps && \
