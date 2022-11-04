@@ -19,8 +19,10 @@ docker push public.ecr.aws/o1b1c4o6/laravel-docker:latest
 
 ## deploy to SHRD gitlab
 
-docker login repo.shrd.fr:5050
+docker login repo.shrd.fr:5050 -u user -p token
 
 docker build -t repo.shrd.fr:5050/sapiendo/sapiendo_laravel:latest .
-
 docker push repo.shrd.fr:5050/sapiendo/sapiendo_laravel:latest
+
+docker build -t repo.shrd.fr:5050/sapiendo/sapiendo_laravel:php_8.1 .
+docker push repo.shrd.fr:5050/sapiendo/sapiendo_laravel:php_8.1
