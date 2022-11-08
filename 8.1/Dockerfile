@@ -74,6 +74,7 @@ RUN apk add --update bash zip unzip curl sqlite nginx supervisor php8 \
     php8-tokenizer \
     php8-pecl-redis \
     php8-xdebug \
+    php8-bcmath \
     npm
 
 # Install GD & php extension
