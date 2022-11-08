@@ -40,15 +40,17 @@ RUN pecl install \
     imagick \
     xdebug
 
-# Install and enable php extensions
-RUN docker-php-ext-enable \
-    imagick \
-    xdebug
+
 #RUN docker-php-ext-configure zip --with-libzip
 #install some base extensions
 RUN apk add --no-cache \
         libzip-dev \
         zip
+
+# Install and enable php extensions
+RUN docker-php-ext-enable \
+    imagick \
+    xdebug
 
 RUN apk add --update bash zip unzip curl sqlite nginx supervisor php8 \
     php8-common \
@@ -74,7 +76,6 @@ RUN apk add --update bash zip unzip curl sqlite nginx supervisor php8 \
     php8-tokenizer \
     php8-pecl-redis \
     php8-xdebug \
-    php8-bcmath \
     npm
 
 # Install GD & php extension
@@ -92,6 +93,7 @@ RUN apk add --no-cache --virtual build-essentials \
     docker-php-ext-install opcache && \
     docker-php-ext-install exif && \
     docker-php-ext-install zip && \
+    docker-php-ext-install bcmath && \
     apk del build-essentials && rm -rf /usr/src/php*
 
 
